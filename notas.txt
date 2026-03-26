@@ -1,0 +1,25 @@
+Instalar express, cors, nodemon, mysql
+npm init -y
+copiar y pegar el start
+crear el archivo index.js
+
+npm start
+
+# Navega al directorio del proyecto
+cd /c/Users/Sergi/Documents/YouGottaGoThere
+
+# Instala dependencias del backend
+cd backend
+npm install
+
+# Instala dependencias del cliente
+cd ../Client
+npm install
+
+# Ejecuta el backend en segundo plano
+cd ../backend
+npm start &
+
+# Ejecuta el cliente (en otra terminal o en primer plano)
+cd ../Client
+npm run dev
