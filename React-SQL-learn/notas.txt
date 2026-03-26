@@ -1,0 +1,2 @@
+Backend
+Para ejecutar el backend es npm start (lo mismo para frontend)
