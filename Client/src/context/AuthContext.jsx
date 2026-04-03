@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const login = async (username, password) => {
+        //Given username and password, call backend login
         const response = await fetch('http://localhost:8800/users/login', {
             method: 'POST',
             headers: {
@@ -51,6 +52,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const register = async (username, password) => {
+        // Given username and passord, call for backend register
         console.log("register", username, password)
         const response = await fetch('http://localhost:8800/users/register', {
             method: 'POST',

@@ -13,9 +13,8 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!loading && !currentUser) {
-      navigate('/login')
-    } else if (!loading && currentUser && window.location.pathname === '/login') {
+    // Si el usuario está autenticado y está en /login, redirigir al home
+    if (!loading && currentUser && window.location.pathname === '/login') {
       navigate('/')
     }
   }, [currentUser, loading, navigate])

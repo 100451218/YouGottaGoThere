@@ -3,20 +3,22 @@ const db = require("../db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
+//Function getusers, gets all users from the database
 const getUsers = async (req, res) => {
-    const q = "SELECT * FROM users"
+    const q = "SELECT * FROM user"
     db.query(q, (err, data) => {
         if (err) return res.json(err)
         return res.json(data)
     })
 }
 
+// Function register: Given username and password, if it doesn't exist, create user
 const register = async (req, res) => {
     console.log("register")
     const { username, password } = req.body
 
     // Check if user exists
-    const q = "SELECT * FROM users WHERE username = ?"
+    const q = "SELECT * FROM user WHERE username = ?"
     db.query(q, [username], async (err, data) => {
         if (err) return res.status(500).json(err)
         if (data.length) return res.status(409).json("User already exists")
@@ -26,7 +28,7 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt)
 
         // Insert user
-        const q2 = "INSERT INTO users (`username`, `password`) VALUES (?, ?)"
+        const q2 = "INSERT INTO user (`username`, `password`) VALUES (?, ?)"
         const values = [username, hashedPassword]
         db.query(q2, values, (err, data) => {
             if (err) return res.status(500).json(err)
@@ -35,10 +37,11 @@ const register = async (req, res) => {
     })
 }
 
+// Function login, given username and password, check if the data is correct and login the user
 const login = async (req, res) => {
     const { username, password } = req.body
 
-    const q = "SELECT * FROM users WHERE username = ?"
+    const q = "SELECT * FROM user WHERE username = ?"
     db.query(q, [username], (err, data) => {
         if (err) return res.status(500).json(err)
         if (data.length === 0) return res.status(404).json("User not found")
@@ -59,13 +62,15 @@ const login = async (req, res) => {
     })
 }
 
+// Function check, obtains client's token and obtains users data by searching for id
 const check = (req, res) => {
     const token = req.cookies.access_token
     if (!token) return res.status(401).json("Not authenticated")
 
     jwt.verify(token, "jwtkey", (err, userInfo) => {
+        // Verify the client's token with ours
         if (err) return res.status(403).json("Token is not valid")
-        const q = "SELECT id, username FROM users WHERE id = ?"
+        const q = "SELECT id, username FROM user WHERE id = ?"
         db.query(q, [userInfo.id], (err, data) => {
             if (err) return res.status(500).json(err)
             if (data.length === 0) return res.status(404).json("User not found")
@@ -74,6 +79,7 @@ const check = (req, res) => {
     })
 }
 
+// Function logout, erase user data fron the cookies
 const logout = (req, res) => {
     res.clearCookie("access_token").status(200).json("Logged out")
 }

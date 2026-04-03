@@ -3,7 +3,7 @@ const cors = require("cors")
 const cookieParser = require("cookie-parser")
 
 const app = express()
-app.use(cors({ origin: "http://localhost:5175", credentials: true })) // Allow frontend origin
+app.use(cors({ origin: "http://localhost:5173", credentials: true })) // Allow frontend origin
 app.use(express.json())
 app.use(cookieParser())
 
@@ -11,6 +11,7 @@ app.use(cookieParser())
 
 // Import routes
 const userRoutes = require("./routes/users.js")
+const restaurantRoutes = require("./routes/restaurants.js")
 
 
 // Middelware: Register calls to the server and log them into the servers console
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 // Middleware: Define where to use depending on the routes
 app.use("/users", userRoutes)
+app.use("/restaurants", restaurantRoutes)
 
 /*
 app.get("/", (req,res)=>{
