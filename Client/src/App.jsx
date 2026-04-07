@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom"
 import { useAuth } from './context/AuthContext'
 import NavBar from './components/NavBar'
 import Home from './components/Home'
-import Profile from './components/Profile'
+import ProfilePage from './pages/ProfilePage'
 import LoginPage from './pages/LoginPage'
 
 import "./css/App.css"
@@ -31,7 +31,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path='/' element={<Home />} />
-            <Route path='/favorites' element={<Profile />} />
+            <Route path='/favorites' element={<ProfilePage />} />
           </Routes>
         </main>
       </div>
