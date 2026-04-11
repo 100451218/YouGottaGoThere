@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS user;
 -- ==========================================
 CREATE TABLE user (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NULL UNIQUE,
   username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   profile_picture VARCHAR(255),

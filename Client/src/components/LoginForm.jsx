@@ -17,6 +17,7 @@ function LoginForm() {
         if (result.success) {
             navigate('/')
         } else {
+            console.log(result);
             alert(result.error)
         }
     }
