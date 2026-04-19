@@ -12,6 +12,7 @@ app.use(cookieParser())
 // Import routes
 const userRoutes = require("./routes/users.js")
 const restaurantRoutes = require("./routes/restaurants.js")
+const friendsRoutes = require("./routes/friendship.js")
 
 
 // Middelware: Register calls to the server and log them into the servers console
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 // Middleware: Define where to use depending on the routes
 app.use("/users", userRoutes)
 app.use("/restaurants", restaurantRoutes)
+app.use("/friends", friendsRoutes)
 
 /*
 app.get("/", (req,res)=>{

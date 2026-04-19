@@ -4,6 +4,7 @@ import { useAuth } from './context/AuthContext'
 import NavBar from './components/NavBar'
 import Home from './components/Home'
 import ProfilePage from './pages/ProfilePage'
+import FriendsPage from './pages/FriendsPage'
 import LoginPage from './pages/LoginPage'
 
 import "./css/App.css"
@@ -32,6 +33,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path='/' element={<Home />} />
             <Route path='/favorites' element={<ProfilePage />} />
+            <Route path="/friends" element={<FriendsPage />}/>
           </Routes>
         </main>
       </div>

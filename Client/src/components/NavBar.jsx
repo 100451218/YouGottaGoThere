@@ -16,9 +16,11 @@ function NavBar()
         </div>
         <div className="navbar-links">
             <Link to="/" className="nav-link">Home</Link>
+            <Link to="/friends" className="nav-link">Friends</Link>
             <Link to="/favorites" className="nav-link">Profile</Link>
             {currentUser && <button onClick={handleLogout}>Logout</button>}
         </div>
+        
         </nav>
 }
 
