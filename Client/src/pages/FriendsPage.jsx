@@ -3,6 +3,8 @@ import NavBar from "../components/NavBar"
 import { useAuth } from '../context/AuthContext'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import AddFriendsSection from "../components/Friends/AddFriendsSection"
+import MyFriendsSection from "../components/Friends/MyFriendsSection"
+import MyFriendsRequestsSection from "../components/Friends/MyFriendsRequestsSection"
 
 
 
@@ -21,6 +23,10 @@ function FriendsPage() {
             <AddFriendsSection/>
 
             {/* PARTE 2: Ver amigos */}
+            <MyFriendsRequestsSection/>
+
+            {/* PARTE 3: Ver amigos */}
+            <MyFriendsSection/>
         </div>
     </>)
 }
