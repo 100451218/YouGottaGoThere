@@ -9,15 +9,20 @@ import { useFetch } from "../../hooks/useFetch";
  * 
  * 
 */
-function MyFriendsRequestsSection() {
+function MyFriendsRequestsSection({friends_requests}) {
 
     const {fetchRequest, loading: fetchLoading, error: fetchError} = useFetch()
     const [username, setUsername] = useState('')
 
+    /*
     const friends_requests = [
         {"id":1,"name": "Pepe", "username": "PepeCrack"},
         {"id":2,"name": "Juan", "username": "JuanTheCool"},
     ]
+    */
+   console.log(friends_requests)
+    // TODO Las friends no tienen el nombre de los usuarios, los tengo que sacar de users!!!!
+
     
 
     return (
@@ -25,7 +30,7 @@ function MyFriendsRequestsSection() {
         <section className="add-restaurant-section">
             <ul>
                 {friends_requests.map(mapped_friend=>(
-                <li friend={mapped_friend} key={mapped_friend.id}>{mapped_friend.name}<button>Aceptar</button></li>
+                <li friend={mapped_friend} key={mapped_friend.id}>{mapped_friend.username}<button>Aceptar</button></li>
                 ))}
             {/* Important to add the key or other prop so that react can differentiate each element */}
             </ul>

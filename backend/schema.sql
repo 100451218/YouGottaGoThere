@@ -100,7 +100,6 @@ CREATE TABLE friendship (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id_1) REFERENCES user(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id_2) REFERENCES user(id) ON DELETE CASCADE,
-  CONSTRAINT different_users CHECK (user_id_1 < user_id_2),
   CONSTRAINT valid_status CHECK (status IN ('pending', 'accepted', 'blocked')),
   UNIQUE KEY unique_friendship (user_id_1, user_id_2)
 );
