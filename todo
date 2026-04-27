@@ -1,10 +1,14 @@
 Te has quedado haciendo los usuarios:
 Done in last sesion:
-    - Terminar función de crear amistad
-    - He creado los componentes de react.
+    - He hecho en FriendsPage el codigo para obtener todas las solicitudes de amistad (además de las amistades ya existentes) y para obtener todos los usuarios, se espera el sistema a que se obtengan ambos y se pasan a MyFriendsRequestsSection, que muestra en la lista todas las solicitudes de amistad pendientes.
     
 ToDo in next session:
+    - Agregar título de sección "Solicitudes de amistad"
+    - Añadir botón de aceptar solicitud de amistad.
+    - Crear en backend controller para aceptar solicitud de amistad. 
+    - Verificar que el dom se recarga con las nueva amistad aceptada y la base de datos tiene la nueva amistad de pending -> accepted
+
+ToDo in future
     - Comunicación con la base de datos de friends para obtener todas las amistades
-    - Comunicación con la base de datos de friends para obtener todas las solicitudes de amistad (a lo mejor fusionarlo en una, pero por ahora creo que no)
     - Comunicación con la base de datos de friends para que cuando se pulse en accept de una solicitud, se escriba un post de aceptar amistad
         

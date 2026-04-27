@@ -19,12 +19,17 @@ function FriendsPage() {
 
     // Estado: Amigos del usuario
     const [userFriends, setUserFriends] = useState([])
-    const [userFriendRequests, setUserFriendRequests] =  useState([])
+    const [userFriendRequests, setUserFriendRequests] = useState([])
+    const [users, setUsers] = useState([])
+    
+    // NUEVO: Estados de carga independientes
+    const [friendsLoaded, setFriendsLoaded] = useState(false)
+    const [usersLoaded, setUsersLoaded] = useState(false)
 
-    //useEffect() => Operations that affect something outside the scope of the function being executed, such as fetching data
     useEffect(() => {
         if (currentUser) {
             loadUserFriends()
+            loadUsers()
         }
     }, [currentUser])
     // Whenever the currentUser changes, we rerun this use Effect
@@ -39,7 +44,7 @@ function FriendsPage() {
             let all_accepted_friends = []
             let all_friends_requests = []
             all_friends.forEach(friendship => {
-                if (friendship.status == "pending"){
+                if (friendship.status == "pending") {
                     all_friends_requests.push(friendship)
                 } else if (friendship.status == "accepted") {
                     all_accepted_friends.push(friendship)
@@ -50,23 +55,36 @@ function FriendsPage() {
             setUserFriends(all_accepted_friends)
             setUserFriendRequests(all_friends_requests)
         }
+        setFriendsLoaded(true) // ✅ Marcar como cargado
     }
-    //TODO hacer que ahora se pase a cada uno de los componentes las respectivas listas de amistad
+
+    const loadUsers = async () => {
+        const result = await fetchRequest('/users')
+        if (result.success) {
+            setUsers(result.data)
+        } else {
+            console.log("Error al obtener todos los usuarios!")
+        }
+        setUsersLoaded(true) // ✅ Marcar como cargado
+    }
+
+    // ✅ No renderizar hasta que ambas peticiones estén completas
+    if (!friendsLoaded || !usersLoaded) {
+        return <div className="profile-cointaner"><p>Cargando...</p></div>
+    }
 
     return (<>
-    
         <div className="profile-cointaner">
             <h1>Mis Amigos - {currentUser ? currentUser.username : 'Cargando...'}</h1>
             
-            {/* PARTE 1: Añadir amigos */}
-            <AddFriendsSection/>
+            <AddFriendsSection />
 
-            {/* PARTE 2: Ver amigos */}
             <MyFriendsRequestsSection 
-            friends_requests = {userFriendRequests}/>
+                friends_requests={userFriendRequests}
+                users_list={users}
+            />
 
-            {/* PARTE 3: Ver amigos */}
-            <MyFriendsSection/>
+            <MyFriendsSection />
         </div>
     </>)
 }

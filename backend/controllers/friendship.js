@@ -86,7 +86,7 @@ const getFriendships = async(req, res) => {
     const userId = getUserIdFromToken(req)
     if (!userId) return res.status(401).json("Not authenticated")
     
-    console.log("Get all friendships from userId", userId)
+    console.log("Get all friendships (accepted and solicited to) from userId", userId)
     const q = "SELECT * from friendship WHERE ((user_id_1 = ? OR user_id_2 = ?) AND status='accepted') OR (user_id_2 = ? AND status='pending')"
     db.query(q, [userId, userId, userId], (err, data) => {
         if (err) return res.status(500).json(err)
