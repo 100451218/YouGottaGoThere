@@ -1,12 +1,12 @@
 Te has quedado haciendo los usuarios:
 Done in last sesion:
-    - Crear en backend controller para aceptar solicitud de amistad. 
-    - Verificar que el dom se recarga con las nueva amistad aceptada y la base de datos tiene la nueva amistad de pending -> accepted
-    - Mostrar los amigos actuales
-    - Opción de deshacer amistad?
-ToDo in next session:
     - Verificar en database que se crean los restaurantes
     - Añadir sección para ver restaurantes no top 5
+ToDo in next session:
+
+    - Evitar que se pueda elegir "Elegir restaurante" si ya hay un restaurante elegido (que no se pueda quitar un restaurante del top 5, que solo se pueda sustituir por otro)
+    - Poder elegir en la lista de no rankeados para poner un ranking
+
 
 ToDo in future
     - Ver los restaurantes que son top 5 de tus amigos

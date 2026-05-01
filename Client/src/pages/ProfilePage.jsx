@@ -6,6 +6,7 @@ import TierListSection from '../components/Profile/TierListSection'
 import RestaurantWizard from '../components/Profile/RestaurantWizard'
 import AddRestaurantSection from '../components/Profile/AddRestaurantSection'
 import '../css/Profile.css'
+import NotTopUserRestaurants from '../components/Profile/NotTopUserRestaurants'
 
 /**
  * ProfilePage
@@ -150,6 +151,10 @@ function ProfilePage() {
         restaurantCount={userRestaurants.length}
         onAddClick={handleOpenWizard}
       />
+
+      {/* PARTE 3: VER LOS RESTAURANTES QUE NO SON TOP 5*/ }
+      <NotTopUserRestaurants
+        restaurants={userRestaurants}/>
 
       {/* WIZARD MODAL */}
       {showWizard && (
