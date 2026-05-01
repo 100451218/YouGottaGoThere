@@ -9,35 +9,33 @@ import { useFetch } from "../../hooks/useFetch";
  * 
  * 
 */
-function MyFriendsSection() {
+function MyFriendsSection({friends, users_list, onDelete, currentUser}) {
 
     const {fetchRequest, loading: fetchLoading, error: fetchError} = useFetch()
     const [username, setUsername] = useState('')
 
-    const friends = [
-        {"id":1,"name": "Pepe", "username": "PepeCrack"},
-        {"id":2,"name": "Juan", "username": "JuanTheCool"},
-    ]
+    console.log("friends from parent", friends, users_list, currentUser)
     
 
     return (
         
         <section className="add-restaurant-section">
+            <h2>Mis amigos</h2>
             <ul>
-                {friends.map(mapped_friend=>(
-                <li friend={mapped_friend} key={mapped_friend.id}>{mapped_friend.name}</li>
-                ))}
-            {/* Important to add the key or other prop so that react can differentiate each element */}
+                {friends.map((mapped_friend)=>{
+                    const friend_id = (mapped_friend.user_id_1 != currentUser.id) ? (mapped_friend.user_id_1) : (mapped_friend.user_id_2)  
+                    const user_data = users_list.find((u) => u.id === friend_id)
+                    return (
+                        <li key={mapped_friend.user_id_1}>{user_data.username}<button onClick={() => onDelete(friend_id)}>Eliminar</button></li>
+                    )
+                }
+                )}
             </ul>
-            
-            
-
-            
+  
         </section>
 
         
     )
 }
-
 
 export default MyFriendsSection 

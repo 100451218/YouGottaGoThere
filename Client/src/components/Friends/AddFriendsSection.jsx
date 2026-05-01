@@ -35,7 +35,7 @@ function AddFriendsSection() {
     return (
         
         <section className="add-restaurant-section">
-            <h2>Mis amigos</h2>
+            <h2>Añadir amigos</h2>
             <form autoComplete='off' onSubmit={addFriendSubmit}>
                 <input 
                 type="text"

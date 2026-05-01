@@ -9,7 +9,7 @@ import { useFetch } from "../../hooks/useFetch";
  * 
  * 
 */
-function MyFriendsRequestsSection({friends_requests, users_list}) {
+function MyFriendsRequestsSection({friends_requests, users_list, onAccept}) {
 
     const {fetchRequest, loading: fetchLoading, error: fetchError} = useFetch()
     const [username, setUsername] = useState('')
@@ -18,12 +18,13 @@ function MyFriendsRequestsSection({friends_requests, users_list}) {
     return (
         
         <section className="add-restaurant-section">
+            <h2>Solicitudes de amistad</h2>
             <ul>
                 {friends_requests.map((mapped_friend) => {
-                    const user_data = users_list.find((u) => u.id === mapped_friend.id);
-                    console.log("user data:", mapped_friend, user_data)
+                    const user_data = users_list.find((u) => u.id === mapped_friend.user_id_1);
+                    //console.log("user data:", mapped_friend, user_data)
                     return (
-                        <li key={mapped_friend.id}>{user_data.username}</li>
+                        <li key={mapped_friend.user_id_1}>{user_data.username}<button onClick={() => onAccept(mapped_friend.user_id_1)}>Aceptar</button></li>
                     )
                 })}
             {/* Important to add the key or other prop so that react can differentiate each element */}

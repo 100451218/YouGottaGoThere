@@ -77,7 +77,57 @@ const friendshipRequest = async (req, res) => {
 
 
 const acceptFriendship = async(req,res) => {
-    console.log("accept", req, res)
+    console.log("accept friendship", req, res)
+    const {userId} = req.body
+    const activeUserId = getUserIdFromToken(req)
+    if (!activeUserId) return res.status(401).json("Not authenticated")
+
+    console.log("Friendship accepted between user", activeUserId, " and ", userId)
+    if (activeUserId===userId) return res.status(400).json("You cannot add yourself as a friend")
+
+    // We want to 1st verify that the friendship that was accepted exists and it is actually pending
+    const query1 = "SELECT id FROM friendship where ((user_id_1 = ? AND user_id_2 = ?) OR (user_id_1 = ? AND user_id_2 = ?) AND status = 'pending')"
+    db.query(query1, [activeUserId, userId, userId, activeUserId], (err1, data1) => {
+        if (err1) return res.status(500).json(err1)
+        friendship = data1[0]
+        if (!friendship) return res.status(500).json(err1)
+        console.log("Friendship exists", data1)
+        const query2 = "UPDATE friendship SET status = 'accepted' WHERE id = ?"
+        db.query(query2, [friendship.id], (err2, result) => {
+            if (err2) return res.status(500).json(err2)
+            console.log("Friend request accepted, result:", result)
+            res.json("Friend request accepted, you are now friends")
+        })
+    })
+
+
+}
+
+const deleteFriendship = async(req,res) => {
+    console.log("delete friendship", req, res)
+    const {userId} = req.body
+    const activeUserId = getUserIdFromToken(req)
+    if (!activeUserId) return res.status(401).json("Not authenticated")
+
+    console.log("Friendship deleted between user", activeUserId, " and ", userId)
+    if (activeUserId===userId) return res.status(400).json("You cannot delete yourself as a friend")
+
+    // We want to 1st verify that the friendship that was deleted exists and it is actually accepted
+    const query1 = "SELECT id FROM friendship where ((user_id_1 = ? AND user_id_2 = ?) OR (user_id_1 = ? AND user_id_2 = ?) AND status = 'accepted')"
+    db.query(query1, [activeUserId, userId, userId, activeUserId], (err1, data1) => {
+        if (err1) return res.status(500).json(err1)
+        friendship = data1[0]
+        if (!friendship) return res.status(500).json(err1)
+        console.log("Friendship exists", data1)
+        const query2 = "DELETE FROM friendship WHERE id = ?"
+        db.query(query2, [friendship.id], (err2, result) => {
+            if (err2) return res.status(500).json(err2)
+            console.log("Friendship deleted, result:", result)
+            res.json("Friendship terminated you are no longer friends o7")
+        })
+    }) 
+
+
 }
 
 //Get from logged user all the current accepted friendships (does not matter who asked who) and the pending friendships for him to accept
@@ -94,6 +144,7 @@ const getFriendships = async(req, res) => {
         if (data.length === 0) {
             console.log("User has no friends, what a loser!")
             // TODO crear un return y mensaje en front para cuando no haya amigos
+            return res.status(200).json("No friendships found")
         } else {
             return res.json(data)
         }
@@ -104,4 +155,5 @@ module.exports = {
     friendshipRequest,
     acceptFriendship,
     getFriendships,
+    deleteFriendship,
 }

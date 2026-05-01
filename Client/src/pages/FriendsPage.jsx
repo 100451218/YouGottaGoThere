@@ -38,24 +38,29 @@ function FriendsPage() {
     //API: Cargar todas las amistades del usuario (las aceptadas y las solicitadas)
     const loadUserFriends = async () => {
         const result = await fetchRequest("/friends")
-        console.log(result)
+        console.log("LoadUserFriends",result.data)
         if (result.success) {
-            let all_friends = result.data
-            let all_accepted_friends = []
-            let all_friends_requests = []
-            all_friends.forEach(friendship => {
-                if (friendship.status == "pending") {
-                    all_friends_requests.push(friendship)
-                } else if (friendship.status == "accepted") {
-                    all_accepted_friends.push(friendship)
-                }
-            });
-            console.log("Accepted friendships", all_accepted_friends)
-            console.log("Requested friendships", all_friends_requests)
-            setUserFriends(all_accepted_friends)
-            setUserFriendRequests(all_friends_requests)
+            if (typeof(result.data)=="string"){
+                setFriendsLoaded(true)
+            } else {
+                let all_friends = result.data
+                let all_accepted_friends = []
+                let all_friends_requests = []
+                all_friends.forEach(friendship => {
+                    if (friendship.status == "pending") {
+                        all_friends_requests.push(friendship)
+                    } else if (friendship.status == "accepted") {
+                        all_accepted_friends.push(friendship)
+                    }
+                });
+                console.log("Accepted friendships", all_accepted_friends)
+                console.log("Requested friendships", all_friends_requests)
+                setUserFriends(all_accepted_friends)
+                setUserFriendRequests(all_friends_requests)
+            }
+            setFriendsLoaded(true) // ✅ Marcar como cargado
         }
-        setFriendsLoaded(true) // ✅ Marcar como cargado
+        
     }
 
     const loadUsers = async () => {
@@ -70,7 +75,46 @@ function FriendsPage() {
 
     // ✅ No renderizar hasta que ambas peticiones estén completas
     if (!friendsLoaded || !usersLoaded) {
+        console.log("Cargando case", friendsLoaded, usersLoaded)
         return <div className="profile-cointaner"><p>Cargando...</p></div>
+    }
+
+    const acceptFriendship = async (userId) => {
+        console.log("Amistad acceptada con id", userId)
+        try {
+            const result = await fetchRequest("/friends/accept", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId,
+                }),
+            })
+            console.log(result)
+
+            if (result.success){
+                loadUserFriends()
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const deleteFriendship = async (userId) => {
+        console.log("The user does not want to be friends with", userId)
+        try {
+            const result = await fetchRequest("/friends/delete", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId,
+                }),
+            })
+            console.log(result)
+
+            if (result.success){
+                loadUserFriends()
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (<>
@@ -82,9 +126,14 @@ function FriendsPage() {
             <MyFriendsRequestsSection 
                 friends_requests={userFriendRequests}
                 users_list={users}
+                onAccept={acceptFriendship}
             />
 
-            <MyFriendsSection />
+            <MyFriendsSection 
+                friends={userFriends}
+                users_list={users}
+                onDelete={deleteFriendship}
+                currentUser = {currentUser}/>
         </div>
     </>)
 }
