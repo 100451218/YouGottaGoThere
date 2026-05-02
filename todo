@@ -1,10 +1,7 @@
 Te has quedado haciendo los usuarios:
 Done in last sesion:
-    - Verificar en database que se crean los restaurantes
-    - Añadir sección para ver restaurantes no top 5
+    - Evitar que se pueda elegir "Elegir restaurante" si ya hay un restaurante elegido (que no se pueda quitar un restaurante del top 5, que solo se pueda sustituir por otro). LO HA HECHO LA IA
 ToDo in next session:
-
-    - Evitar que se pueda elegir "Elegir restaurante" si ya hay un restaurante elegido (que no se pueda quitar un restaurante del top 5, que solo se pueda sustituir por otro)
     - Poder elegir en la lista de no rankeados para poner un ranking
 
 

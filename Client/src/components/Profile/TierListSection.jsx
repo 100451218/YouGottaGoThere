@@ -43,12 +43,23 @@ function TierSlot({ ranking, selectedRestaurantId, restaurants, onChange }) {
         onChange={(e) => onChange(parseInt(e.target.value) || null)}
         aria-label={`Selecciona restaurante para ranking ${ranking}`}
       >
-        <option value="">-- Selecciona un restaurante --</option>
-        {restaurants.map((restaurant) => (
-          <option key={restaurant.id} value={restaurant.id}>
-            {restaurant.name} ({restaurant.locationx}, {restaurant.locationy})
+        {!selectedRestaurant && (
+          <option value="">-- Selecciona un restaurante --</option>
+        )}
+
+        {selectedRestaurant && (
+          <option value={selectedRestaurant.id} disabled>
+            {selectedRestaurant.name} ({selectedRestaurant.locationx}, {selectedRestaurant.locationy})
           </option>
-        ))}
+        )}
+
+        {restaurants
+          .filter((restaurant) => !selectedRestaurant || restaurant.id !== selectedRestaurant.id)
+          .map((restaurant) => (
+            <option key={restaurant.id} value={restaurant.id}>
+              {restaurant.name} ({restaurant.locationx}, {restaurant.locationy})
+            </option>
+          ))}
       </select>
 
       {selectedRestaurant && (
