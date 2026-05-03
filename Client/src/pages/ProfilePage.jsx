@@ -154,7 +154,9 @@ function ProfilePage() {
 
       {/* PARTE 3: VER LOS RESTAURANTES QUE NO SON TOP 5*/ }
       <NotTopUserRestaurants
-        restaurants={userRestaurants}/>
+        restaurants={userRestaurants}
+        onChangeRanking={handleChangeRanking}
+        />
 
       {/* WIZARD MODAL */}
       {showWizard && (
