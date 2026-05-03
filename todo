@@ -2,11 +2,12 @@ Te has quedado haciendo los usuarios:
 Done in last sesion:
     - Poder elegir en la lista de no rankeados para poner un ranking
 ToDo in next session:
-    - Ver los restaurantes que son top 5 de tus amigos
+    - Ver los restaurantes que son top 5 de tus amigos:
+       - Ejecutar el fetch una vez
+       - Cargar de la base de datos los top 5 de todos los amigos (reutilizar el controller de amigos quizás?)
 
 
 ToDo in future
-    
     - Ver los restaurantes que son top 5 de tus amigos en orden
     - Filtros para ver los restaurantes
     - Reviews

@@ -17,6 +17,11 @@ function MyFriendsSection({friends, users_list, onDelete, currentUser}) {
     console.log("friends from parent", friends, users_list, currentUser)
     
 
+    // Guard: no renderizar si currentUser es null
+    if (!currentUser) {
+        return null
+    }
+
     return (
         
         <section className="add-restaurant-section">
@@ -25,6 +30,10 @@ function MyFriendsSection({friends, users_list, onDelete, currentUser}) {
                 {friends.map((mapped_friend)=>{
                     const friend_id = (mapped_friend.user_id_1 != currentUser.id) ? (mapped_friend.user_id_1) : (mapped_friend.user_id_2)  
                     const user_data = users_list.find((u) => u.id === friend_id)
+                    // Guard: evitar renderizar si user_data no existe
+                    if (!user_data) {
+                        return null
+                    }
                     return (
                         <li key={mapped_friend.user_id_1}>{user_data.username}<button onClick={() => onDelete(friend_id)}>Eliminar</button></li>
                     )

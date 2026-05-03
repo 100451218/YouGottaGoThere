@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, useNavigate } from "react-router-dom"
 import { useAuth } from './context/AuthContext'
 import NavBar from './components/NavBar'
-import Home from './components/Home'
+import Home from './pages/HomePage'
 import ProfilePage from './pages/ProfilePage'
 import FriendsPage from './pages/FriendsPage'
 import LoginPage from './pages/LoginPage'
