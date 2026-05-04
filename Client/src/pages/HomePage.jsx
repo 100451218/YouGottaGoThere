@@ -32,8 +32,10 @@ function Home()
     }
 
     return <div className="home">
-
-        Homeaaa
+        {userRecomendations.map((friend_review) => {
+            return (<div key={friend_review.user_id +friend_review.restaurant_id}>{friend_review.restaurant_id+" Es el top "+ friend_review.ranking + " de tu amigo "+ friend_review.user_id+ " su review es "+ friend_review.description + " "}</div>)
+        })}
+        
     </div>
 }
 
