@@ -33,7 +33,14 @@ function Home()
 
     return <div className="home">
         {userRecomendations.map((friend_review) => {
-            return (<div key={friend_review.user_id +friend_review.restaurant_id}>{friend_review.restaurant_id+" Es el top "+ friend_review.ranking + " de tu amigo "+ friend_review.user_id+ " su review es "+ friend_review.description + " "}</div>)
+            return (<div key={friend_review.user_id + friend_review.restaurant_id}>
+                <strong>{friend_review.restaurant_name}</strong> (Ubicación: {friend_review.locationx}, {friend_review.locationy})
+                <br />
+                Es el top {friend_review.ranking} de tu amigo <strong>{friend_review.username}</strong>
+                <br />
+                Review: {friend_review.description}
+                <hr />
+            </div>)
         })}
         
     </div>
