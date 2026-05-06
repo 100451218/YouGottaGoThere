@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { useFetch } from '../hooks/useFetch'
+import RestaurantRecomendation from '../components/Home/RestaurantRecomendation'
 
 function Home() 
 {
@@ -32,15 +33,8 @@ function Home()
     }
 
     return <div className="home">
-        {userRecomendations.map((friend_review) => {
-            return (<div key={friend_review.user_id + friend_review.restaurant_id}>
-                <strong>{friend_review.restaurant_name}</strong> (Ubicación: {friend_review.locationx}, {friend_review.locationy})
-                <br />
-                Es el top {friend_review.ranking} de tu amigo <strong>{friend_review.username}</strong>
-                <br />
-                Review: {friend_review.description}
-                <hr />
-            </div>)
+        {userRecomendations.map((friend_review, index) => {
+            return (<RestaurantRecomendation key={index} friend_review={friend_review}/>)
         })}
         
     </div>
