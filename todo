@@ -1,12 +1,14 @@
 Te has quedado haciendo los usuarios:
 Done in last sesion:
-    - Obtener la información de tus amigos (nombre) y de los restaurantes (nombre, localización) en las recomendaciones
-    - Ver los restaurantes que son top 5 de tus amigos en orden
-    - Creado el recomendation Component
+        - Algoritmo de orden de recomendaciones  (Order by ranking)
 ToDo in next session:
-    - Algoritmo de orden de recomendaciones  
+
+    - Filtros para ver los restaurantes (Antes requiere poner tags a los restaurantes...):
+        o Crear los tags para restaurantes en la base de datos
+        o Crear los tags visualmente en profile: Botón de añadir tags con buscador
+        o Añadir los filtros en el buscador de Home
 
 ToDo in future
-    - Filtros para ver los restaurantes (Antes requiere poner tags a los restaurantes...)
-    - Reviews
+
+    - Explorar para meter apis de google maps
         

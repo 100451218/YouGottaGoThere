@@ -34,7 +34,7 @@ const getRecomendationsForUser = async (req, res) => {
 
         // We need now to construct the next query that gets all the reviews of restaurants that restaurant_review have ranking not null and user_id in the friends
         // JOIN with user table to get username and restaurant table to get name and location
-        query2 = "SELECT rr.restaurant_id, rr.description, rr.user_id, rr.ranking, u.username, r.name as restaurant_name, r.locationx, r.locationy FROM restaurant_review rr JOIN user u ON rr.user_id = u.id JOIN restaurant r ON rr.restaurant_id = r.id WHERE rr.user_id IN ("+friends_array.join(",")+") AND rr.ranking IS NOT NULL ORDER BY rr.restaurant_id"
+        query2 = "SELECT rr.restaurant_id, rr.description, rr.user_id, rr.ranking, u.username, r.name as restaurant_name, r.locationx, r.locationy FROM restaurant_review rr JOIN user u ON rr.user_id = u.id JOIN restaurant r ON rr.restaurant_id = r.id WHERE rr.user_id IN ("+friends_array.join(",")+") AND rr.ranking IS NOT NULL ORDER BY rr.ranking"
         console.log(query2)
         db.query(query2, [], (err2, data2) => {
             console.log("reviews of friends", data2)
