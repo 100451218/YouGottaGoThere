@@ -14,6 +14,7 @@ const userRoutes = require("./routes/users.js")
 const restaurantRoutes = require("./routes/restaurants.js")
 const friendsRoutes = require("./routes/friendship.js")
 const recomendationsRoutes = require("./routes/recomendations.js")
+const tagsRoutes = require("./routes/tags.js")
 
 // Middelware: Register calls to the server and log them into the servers console
 app.use((req, res, next) => {
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 // Middleware: Define where to use depending on the routes
 app.use("/users", userRoutes)
 app.use("/restaurants", restaurantRoutes)
+app.use("/restaurants", tagsRoutes) // Tags también bajo /restaurants
 app.use("/friends", friendsRoutes)
 app.use("/recomendations", recomendationsRoutes)
 

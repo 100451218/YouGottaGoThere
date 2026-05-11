@@ -1,12 +1,25 @@
 import PropTypes from 'prop-types'
 
 /**
+ * ====================================================================
  * AddRestaurantSection
- * Componente presentacional para mostrar botón de añadir restaurante
- *
- * Props:
- * - restaurantCount: número total de restaurantes
- * - onAddClick: callback cuando se presiona el botón
+ * ====================================================================
+ * Componente presentacional simple que muestra:
+ * 1. Un heading "Mis Restaurantes"
+ * 2. Contador total de restaurantes visitados
+ * 3. Botón para abrir el wizard de crear restaurante
+ * 
+ * RESPONSABILIDADES:
+ * - Solo mostrar información y disparar el callback cuando se presiona el botón
+ * 
+ * PROPS:
+ * - restaurantCount: número total de restaurantes que ha revisado el usuario
+ * - onAddClick: callback cuando se presiona el botón de añadir
+ * 
+ * NOTAS:
+ * - Componente muy simple, sin estado interno
+ * - No hace API calls
+ * - La lógica está 100% en ProfilePage.jsx
  */
 function AddRestaurantSection({ restaurantCount, onAddClick }) {
   return (

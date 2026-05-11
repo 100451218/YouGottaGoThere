@@ -1,16 +1,37 @@
 import PropTypes from 'prop-types'
 
 /**
+ * ====================================================================
  * WizardStep1
- * Paso 1 del wizard: buscar o crear restaurante
- *
- * Props:
- * - wizardState: estado del wizard
- * - onStateChange: callback para cambiar estado
+ * ====================================================================
+ * Primer paso del wizard: Buscar o crear restaurante.
+ * 
+ * RESPONSABILIDADES:
+ * 1. Mostrar campos para nombre y coordenadas
+ * 2. Buscar restaurantes en tiempo real mientras escribe
+ * 3. Mostrar sugerencias (búsqueda)
+ * 4. Permitir seleccionar restaurante existente O crear uno nuevo
+ * 
+ * PROPS:
+ * - wizardState: objeto con nombre, locationx, locationy, suggestions
+ * - onStateChange: callback para actualizar fields
  * - onSearch: callback para buscar restaurantes
- * - onSelectExisting: callback para seleccionar restaurante existente
+ * - onSelectExisting: callback cuando selecciona un restaurante sugerido
  * - onCreateNew: callback para crear nuevo restaurante
- * - onClose: callback para cerrar wizard
+ * - onClose: callback para cancelar
+ * 
+ * FLUJO:
+ * 1. Usuario escribe nombre
+ * 2. Si tiene nombre + coordenadas, se buscan restaurantes automáticamente
+ * 3. Se muestran las sugerencias
+ * 4. Usuario puede:
+ *    a) Seleccionar uno de las sugerencias -> ir a paso 2
+ *    b) Crear nuevo (con los datos que escribió) -> ir a paso 2
+ * 
+ * BÚSQUEDA AUTOMÁTICA:
+ * - La búsqueda se dispara cada vez que cambia nombre O coordenadas
+ * - Solo se busca si están rellenos TODOS los campos
+ * - Esto permite encontrar restaurantes cerca del usuario
  */
 function WizardStep1({
   wizardState,
@@ -20,13 +41,28 @@ function WizardStep1({
   onCreateNew,
   onClose,
 }) {
+  /**
+   * Manejador: Cambio en el campo "Nombre"
+   * 
+   * Proceso:
+   * 1. Actualiza el estado con el nuevo nombre
+   * 2. Si ya tiene coordenadas, dispara una búsqueda automática
+   */
   const handleNameChange = (value) => {
     onStateChange('name', value)
+    // Solo buscar si tenemos todos los datos
     if (wizardState.locationx && wizardState.locationy) {
       onSearch(value, wizardState.locationx, wizardState.locationy)
     }
   }
 
+  /**
+   * Manejador: Cambio en el campo "Localización X"
+   * 
+   * Proceso:
+   * 1. Actualiza el estado con la nueva coordenada X
+   * 2. Si ya tiene nombre y Y, dispara una búsqueda automática
+   */
   const handleLocXChange = (value) => {
     onStateChange('locationx', value)
     if (wizardState.name && wizardState.locationy) {
@@ -34,6 +70,13 @@ function WizardStep1({
     }
   }
 
+  /**
+   * Manejador: Cambio en el campo "Localización Y"
+   * 
+   * Proceso:
+   * 1. Actualiza el estado con la nueva coordenada Y
+   * 2. Si ya tiene nombre y X, dispara una búsqueda automática
+   */
   const handleLocYChange = (value) => {
     onStateChange('locationy', value)
     if (wizardState.name && wizardState.locationx) {
@@ -41,6 +84,10 @@ function WizardStep1({
     }
   }
 
+  /**
+   * Validación del formulario
+   * El botón "Crear Nuevo" está deshabilitado hasta que rellene todo
+   */
   const isFormValid =
     wizardState.name && wizardState.locationx && wizardState.locationy
 
@@ -48,6 +95,10 @@ function WizardStep1({
     <div className="wizard-step-1">
       <h3>Paso 1: Buscar o Crear Restaurante</h3>
 
+      {/* ================================================================
+          CAMPO: NOMBRE DEL RESTAURANTE
+          Dispara búsqueda automática cada vez que el usuario escribe
+          ================================================================ */}
       <div className="form-group">
         <label>Nombre del Restaurante</label>
         <input
@@ -58,6 +109,10 @@ function WizardStep1({
         />
       </div>
 
+      {/* ================================================================
+          CAMPOS: COORDENADAS (X, Y)
+          Disparan búsqueda automática junto con el nombre
+          ================================================================ */}
       <div className="form-row">
         <div className="form-group">
           <label>Localización X</label>
@@ -79,19 +134,24 @@ function WizardStep1({
         </div>
       </div>
 
-      {/* Sugerencias */}
+      {/* ================================================================
+          SUGERENCIAS: Restaurantes encontrados
+          Se muestran cuando la búsqueda retorna resultados
+          ================================================================ */}
       {wizardState.suggestions.length > 0 && (
         <div className="suggestions">
           <h4>Restaurantes encontrados:</h4>
           <ul>
             {wizardState.suggestions.map((rest) => (
               <li key={rest.id}>
+                {/* Botón para seleccionar este restaurante */}
                 <button
                   className="suggestion-btn"
                   onClick={() => onSelectExisting(rest)}
                 >
                   {rest.name} ({rest.locationx}, {rest.locationy})
                   <br />
+                  {/* Muestra la distancia calculada por la API */}
                   <small>Distancia: {rest.distance?.toFixed(2)}</small>
                 </button>
               </li>
@@ -100,8 +160,11 @@ function WizardStep1({
         </div>
       )}
 
-      {/* Acciones */}
+      {/* ================================================================
+          ACCIONES: Crear nuevo o Cancelar
+          ================================================================ */}
       <div className="wizard-actions">
+        {/* Crear nuevo: deshabilitado si falta algún campo */}
         <button
           className="btn-primary"
           onClick={onCreateNew}
@@ -109,6 +172,7 @@ function WizardStep1({
         >
           ➕ Crear Nuevo Restaurante
         </button>
+        {/* Cancelar y cerrar el wizard */}
         <button className="btn-secondary" onClick={onClose}>
           Cancelar
         </button>
@@ -116,6 +180,12 @@ function WizardStep1({
     </div>
   )
 }
+
+/**
+ * ====================================================================
+ * PropTypes: Validación de tipos
+ * ====================================================================
+ */
 
 WizardStep1.propTypes = {
   wizardState: PropTypes.shape({

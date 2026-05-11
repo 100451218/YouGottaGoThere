@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { useFetch } from '../hooks/useFetch'
 import RestaurantRecomendation from '../components/Home/RestaurantRecomendation'
+import ToolBar from '../components/Home/ToolBar'
 
 function Home() 
 {
@@ -15,12 +16,14 @@ function Home()
     // Estado: Restaurantes recomendados para el usuario
     const [userRecomendations, setUserRecomendations] = useState([])
 
+
     // Cargar las recomendaciones al usuario al montar
     useEffect(() => {
         if (currentUser) {
             loadUserRecomendations()
         }
     }, [currentUser])
+
 
 
     const loadUserRecomendations = async () => {
@@ -33,6 +36,10 @@ function Home()
     }
 
     return <div className="home">
+
+        <ToolBar 
+            userRecomendations={userRecomendations}></ToolBar>
+
         {userRecomendations.map((friend_review, index) => {
             return (<RestaurantRecomendation key={index} friend_review={friend_review}/>)
         })}
