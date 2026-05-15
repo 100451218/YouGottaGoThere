@@ -91,7 +91,7 @@ function ProfilePage() {
    * 
    * Lógica:
    * 1. Espera a que haya un usuario autenticado (currentUser)
-   * 2. Llama a loadUserRestaurants() para obtener todos sus restaurantes
+   * 2. Llama a loadUserRestaurants() para obtener todos sus restaurantes, reviews y tags de las reviews
    * 3. Popula userRestaurants con la respuesta
    * 
    * Dependencias: [currentUser]
@@ -196,6 +196,7 @@ function ProfilePage() {
   const handleChangeRanking = async (ranking, restaurantId) => {
     // CASO 1: Deseleccionar si es el mismo restaurante
     // El usuario hace clic en el mismo select -> deselecciona
+    console.log("handleChangeRanking", ranking, restaurantId)
     if (tierSelections[ranking] === restaurantId) {
       const result = await fetchRequest(`/restaurants/${restaurantId}/ranking`, {
         method: 'PATCH',
@@ -262,6 +263,7 @@ function ProfilePage() {
    */
   const handleReviewSaved = () => {
     handleCloseWizard()
+    
     loadUserRestaurants()
   }
 
@@ -358,6 +360,7 @@ function ProfilePage() {
           onClose={handleCloseWizard}
           onReviewSaved={handleReviewSaved}
           fetchRequest={fetchRequest}
+          handleChangeRanking={handleChangeRanking}
         />
       )}
 

@@ -37,7 +37,7 @@ import WizardStep2 from './WizardStep2'
  * 3. Hacer las API calls en cada paso
  * 4. Cerrar el modal y resetear cuando termina
  */
-function RestaurantWizard({ isOpen, onClose, onReviewSaved, fetchRequest }) {
+function RestaurantWizard({ isOpen, onClose, onReviewSaved, fetchRequest, handleChangeRanking }) {
   // Número del paso actual (1 o 2)
   const [step, setStep] = useState(1)
 
@@ -181,8 +181,12 @@ function RestaurantWizard({ isOpen, onClose, onReviewSaved, fetchRequest }) {
         tags: tags, // Array de tag IDs (NUEVO)
       }),
     })
-
+    console.log("restaurante", restaurantId, "creada la review y metido ranking", ranking)
+    
     if (result.success) {
+      if (ranking) {
+        handleChangeRanking (ranking,restaurantId)
+      }
       alert('Review guardada exitosamente')
       closeWizard()
       onReviewSaved()
