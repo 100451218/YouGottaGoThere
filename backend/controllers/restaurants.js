@@ -36,45 +36,127 @@ const getUserIdFromToken = (req) => {
  * GET /restaurants/my-restaurants
  * 
  * Obtiene TODOS los restaurantes que el usuario ha revisado (con o sin ranking)
+ * INCLUYE las tags asociadas a cada review
  * 
- * Query: JOIN entre restaurant y restaurant_review
- * Retorna: id, name, locationx, locationy, ranking, description de cada restaurante
+ * Query: LEFT JOIN para traer tags de cada restaurante
+ * Retorna: Array de restaurantes con sus tags agrupados
+ * 
+ * Estructura de cada objeto:
+ * {
+ *   id: number,
+ *   name: string,
+ *   locationx: number,
+ *   locationy: number,
+ *   ranking: number | null,
+ *   description: string,
+ *   tags: [{ id: number, name: string }, ...]
+ * }
  */
 const getRestaurantsForUser = (req, res) => {
     const userId = getUserIdFromToken(req)
     if (!userId) return res.status(401).json("Not authenticated")
     
     const q = `
-        SELECT r.id, r.name, r.locationx, r.locationy, rr.ranking, rr.description
+        SELECT r.id, r.name, r.locationx, r.locationy, rr.ranking, rr.description, 
+               t.id as tag_id, t.name as tag_name
         FROM restaurant r
         JOIN restaurant_review rr ON r.id = rr.restaurant_id
+        LEFT JOIN review_tag rt ON rr.id = rt.review_id
+        LEFT JOIN tags t ON rt.tag_id = t.id
         WHERE rr.user_id = ?
-        ORDER BY rr.updated_at DESC
+        ORDER BY rr.updated_at DESC, r.id
     `
     
     db.query(q, [userId], (err, data) => {
         if (err) return res.status(500).json(err)
-        return res.json(data)
+        
+        // Agrupar filas por restaurante_id y construir array de tags
+        const restaurantsMap = {}
+        
+        data.forEach(row => {
+            if (!restaurantsMap[row.id]) {
+                restaurantsMap[row.id] = {
+                    id: row.id,
+                    name: row.name,
+                    locationx: row.locationx,
+                    locationy: row.locationy,
+                    ranking: row.ranking,
+                    description: row.description,
+                    tags: []
+                }
+            }
+            
+            // Añadir tag si existe (si no hay tag, la fila no tendrá tag_id)
+            if (row.tag_id && row.tag_name) {
+                restaurantsMap[row.id].tags.push({
+                    id: row.tag_id,
+                    name: row.tag_name
+                })
+            }
+        })
+        
+        // Convertir el objeto a array
+        const restaurants = Object.values(restaurantsMap)
+        return res.json(restaurants)
     })
 }
 
-// Get top 5 restaurants for current user (ranking 1-5)
+/**
+ * getTopRestaurantsForUser
+ * GET /restaurants/top5
+ * 
+ * Obtiene los TOP 5 restaurantes (con ranking 1-5)
+ * INCLUYE las tags asociadas a cada review
+ * 
+ * Retorna: Array de máximo 5 restaurantes ordenados por ranking
+ */
 const getTopRestaurantsForUser = (req, res) => {
     const userId = getUserIdFromToken(req)
     if (!userId) return res.status(401).json("Not authenticated")
     
     const q = `
-        SELECT r.id, r.name, r.locationx, r.locationy, rr.ranking, rr.description
+        SELECT r.id, r.name, r.locationx, r.locationy, rr.ranking, rr.description,
+               t.id as tag_id, t.name as tag_name
         FROM restaurant r
         JOIN restaurant_review rr ON r.id = rr.restaurant_id
+        LEFT JOIN review_tag rt ON rr.id = rt.review_id
+        LEFT JOIN tags t ON rt.tag_id = t.id
         WHERE rr.user_id = ? AND rr.ranking IS NOT NULL
-        ORDER BY rr.ranking ASC
+        ORDER BY rr.ranking ASC, r.id
         LIMIT 5
     `
     
     db.query(q, [userId], (err, data) => {
         if (err) return res.status(500).json(err)
-        return res.json(data)
+        
+        // Agrupar filas por restaurante_id y construir array de tags
+        const restaurantsMap = {}
+        
+        data.forEach(row => {
+            if (!restaurantsMap[row.id]) {
+                restaurantsMap[row.id] = {
+                    id: row.id,
+                    name: row.name,
+                    locationx: row.locationx,
+                    locationy: row.locationy,
+                    ranking: row.ranking,
+                    description: row.description,
+                    tags: []
+                }
+            }
+            
+            // Añadir tag si existe
+            if (row.tag_id && row.tag_name) {
+                restaurantsMap[row.id].tags.push({
+                    id: row.tag_id,
+                    name: row.tag_name
+                })
+            }
+        })
+        
+        // Convertir el objeto a array
+        const restaurants = Object.values(restaurantsMap)
+        return res.json(restaurants)
     })
 }
 
