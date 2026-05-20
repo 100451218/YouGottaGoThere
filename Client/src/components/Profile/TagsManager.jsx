@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useTags } from '../../hooks/useTags'
 
 /**
  * ====================================================================
@@ -21,7 +22,7 @@ import PropTypes from 'prop-types'
  * - fetchRequest: función para hacer API calls
  * 
  * FLUJO:
- * 1. Carga las tags disponibles de la BD
+ * 1. Carga las tags disponibles de la BD (via hook useTags)
  * 2. Muestra las tags actuales como chips/badges
  * 3. Al pasar ratón sobre una tag, muestra una X
  * 4. Clic en X quita la tag (API call)
@@ -29,16 +30,17 @@ import PropTypes from 'prop-types'
  * 6. En el modal, busca tags y añade nuevas
  * 
  * NOTAS TÉCNICAS:
+ * - Usa hook useTags para cargar todas las tags disponibles
  * - Usa state para tags actuales
  * - Las tags actuales se pueden quitar rápidamente
  * - Las nuevas se añaden desde el modal de búsqueda
  */
 function TagsManager({ restaurantId, restaurantName, initialTags = [], onTagsUpdated, fetchRequest }) {
+  // Hook personalizado que carga todas las tags disponibles
+  const { allTags, loading } = useTags(fetchRequest)
+
   // Estado: Tags actuales de esta review
   const [currentTags, setCurrentTags] = useState(initialTags)
-  
-  // Estado: Todas las tags disponibles en el sistema
-  const [allTags, setAllTags] = useState([])
   
   // Estado: Modal para añadir tags
   const [showAddModal, setShowAddModal] = useState(false)
@@ -48,14 +50,6 @@ function TagsManager({ restaurantId, restaurantName, initialTags = [], onTagsUpd
   
   // Estado: Tags que no están ya seleccionadas (para mostrar en la búsqueda)
   const [availableTags, setAvailableTags] = useState([])
-  
-  // Estado: Loading
-  const [loading, setLoading] = useState(false)
-
-  // Cargar tags disponibles al montar
-  useEffect(() => {
-    loadAllTags()
-  }, [])
 
   // Sincronizar cuando cambien las tags iniciales
   useEffect(() => {
@@ -65,39 +59,8 @@ function TagsManager({ restaurantId, restaurantName, initialTags = [], onTagsUpd
   // Actualizar lista de tags disponibles cuando cambien las actuales o todas
   useEffect(() => {
     updateAvailableTags()
-  }, [currentTags, allTags])
+  }, [currentTags, allTags, searchQuery])
 
-  /**
-   * loadAllTags
-   * API Call: GET /tags
-   * 
-   * Carga todas las tags disponibles en el sistema
-   * Se ejecuta solo una vez al montar el componente
-   */
-  const loadAllTags = async () => {
-    setLoading(true)
-    try {
-      const result = await fetchRequest('/restaurants/tags')
-      if (result.success) {
-        setAllTags(result.data || [])
-      }
-    } catch (error) {
-      console.error('Error loading tags:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  /**
-   * updateAvailableTags
-   * Calcula qué tags están disponibles para añadir
-   * 
-   * Lógica:
-   * 1. Toma todas las tags
-   * 2. Filtra las que ya están seleccionadas
-   * 3. Filtra por búsqueda (si existe)
-   * 4. Guarda el resultado en availableTags
-   */
   const updateAvailableTags = () => {
     const currentTagIds = currentTags.map(t => t.id)
     const filtered = allTags

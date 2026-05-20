@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useFetch } from '../../hooks/useFetch'
+import { useTags } from '../../hooks/useTags'
 
 /**
  * ====================================================================
@@ -10,7 +12,7 @@ import PropTypes from 'prop-types'
  * RESPONSABILIDADES:
  * 1. Mostrar campo de texto para la review/descripción
  * 2. Mostrar select para elegir ranking (Top 5 o no)
- * 3. Mostrar selector de tags (NUEVO)
+ * 3. Mostrar selector de tags
  * 4. Permitir guardar la review completa o volver atrás
  * 
  * PROPS:
@@ -19,53 +21,18 @@ import PropTypes from 'prop-types'
  * - onSave: callback para guardar todo a la base de datos
  * - onBack: callback para volver al paso 1
  * 
- * NUEVO: Sistema de Tags
- * - Carga todas las tags disponibles de la BD
+ * SISTEMA DE TAGS:
+ * - Usa el hook useTags para cargar todas las tags disponibles
  * - Muestra checkboxes para seleccionar múltiples tags
  * - Guarda los IDs de tags seleccionados en wizardState.tags
- * - Los tags se relacionan con la review en la BD
+ * - Los tags se relacionan con la review en la BD via API
  */
 function WizardStep2({ wizardState, onStateChange, onSave, onBack }) {
-  // Estado para almacenar todas las tags disponibles
-  const [allTags, setAllTags] = useState([])
-  const [loadingTags, setLoadingTags] = useState(false)
+  // Hook para fetch autenticado
+  const { fetchRequest } = useFetch()
 
-  // Cargar tags cuando se monta el componente
-  useEffect(() => {
-    loadAvailableTags()
-  }, [])
-
-  /**
-   * loadAvailableTags
-   * API Call: GET /tags
-   * 
-   * Obtiene todas las tags disponibles de la BD
-   * Las muestra como checkboxes para que el usuario pueda seleccionar
-   */
-  const loadAvailableTags = async () => {
-    setLoadingTags(true)
-    try {
-      // TODO: Cambiar esto cuando el endpoint esté disponible
-      // Por ahora, hardcodeamos algunas tags de ejemplo
-      // const response = await fetch('/tags')
-      // const data = await response.json()
-      // setAllTags(data)
-      
-      // Tags de ejemplo
-      setAllTags([
-        { id: 1, name: 'Comida rápida' },
-        { id: 2, name: 'Italiano' },
-        { id: 3, name: 'Asiático' },
-        { id: 4, name: 'Mexicano' },
-        { id: 5, name: 'Vegano' },
-        { id: 6, name: 'Caro' },
-        { id: 7, name: 'Barato' },
-        { id: 8, name: 'Buena atención' },
-      ])
-    } finally {
-      setLoadingTags(false)
-    }
-  }
+  // Hook personalizado que carga todas las tags disponibles
+  const { allTags, loading: loadingTags } = useTags(fetchRequest)
 
   /**
    * handleTagToggle
@@ -144,7 +111,7 @@ function WizardStep2({ wizardState, onStateChange, onSave, onBack }) {
         {loadingTags ? (
           <p className="loading">Cargando etiquetas...</p>
         ) : (
-          <div className="tags-container">
+          <div className="tags-container" >
             {allTags.map((tag) => (
               <label key={tag.id} className="tag-checkbox">
                 <input
