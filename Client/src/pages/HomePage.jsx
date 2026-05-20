@@ -22,6 +22,7 @@ function Home()
         if (currentUser) {
             loadUserRecomendations()
         }
+
     }, [currentUser])
 
 
@@ -29,9 +30,15 @@ function Home()
     const loadUserRecomendations = async () => {
         console.log("Al abrir la página, cargar los restaurantes")
         const result = await fetchRequest("/recomendations")
+        console.log(result)
         if (result.success) {
-            setUserRecomendations(result.data)
-            console.log(result.data)
+            if (result.data==="Friends have no review in top 5"){
+                setUserRecomendations([])
+            } else {
+                setUserRecomendations(result.data)
+            }
+            
+            
         }
     }
 
@@ -40,9 +47,10 @@ function Home()
         <ToolBar 
             userRecomendations={userRecomendations}></ToolBar>
 
-        {userRecomendations.map((friend_review, index) => {
-            return (<RestaurantRecomendation key={index} friend_review={friend_review}/>)
-        })}
+        { userRecomendations.map((friend_review, index) => {
+                return (<RestaurantRecomendation key={index} friend_review={friend_review}/>)
+            
+            })}
         
     </div>
 }
