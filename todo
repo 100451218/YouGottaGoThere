@@ -2,9 +2,11 @@ Te has quedado haciendo los usuarios:
 Done in last sesion:
     - Bug al añadir un restaurante al top 5 directamente, no se quita el anterior así que hay dos en la base de datos con ranking X
     - Añadir tags en las queries de get recomendations (getRecomendationsForUser tiene que pasar también las tags de dichas reviews)
-ToDo in future:
     - Ver las tags en la pantalla principal
+ToDo in future:
+    - Mejorar visualmente la pantalla principal
 ToDo in next session:
     - Poder filtrar por tags
     - Explorar para meter apis de google maps
+    - Contemplar como funciona cuando se tienen dos reviews del mismo restaurante de distintos amigos
         

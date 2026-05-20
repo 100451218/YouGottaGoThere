@@ -36,7 +36,7 @@ function Home()
                 setUserRecomendations([])
             } else {
                 setUserRecomendations(result.data)
-                console.log("User recomendations ", result.data)
+
             }
             
             

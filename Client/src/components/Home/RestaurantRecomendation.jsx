@@ -1,9 +1,19 @@
+import { useFetch } from "../../hooks/useFetch"
+import { useTags } from "../../hooks/useTags"
 
 
 
 function RestaurantRecomendation({friend_review}) {
+    const { fetchRequest } = useFetch()
+    const { allTags} = useTags(fetchRequest)
+    //allTags obtiene a través del hook todas las tags en forma de una lista de {id, name}
+    
+    console.log(allTags)
+    const getTagName = (tagId) => {
+        const tag = allTags.find(t => t.id === tagId)
+        return tag ? tag.name : `Tag ${tagId}`
+    }
 
-    console.log(typeof(friend_review.user_id))
     return (
     <div >
                 <strong>{friend_review.restaurant_name}</strong> (Ubicación: {friend_review.locationx}, {friend_review.locationy})
@@ -12,6 +22,13 @@ function RestaurantRecomendation({friend_review}) {
                 <br />
                 Review: {friend_review.description}
                 <hr />
+                {friend_review.tags && (<div className="tags-list">
+                    {
+                        JSON.parse(friend_review.tags).map((elem)=>{
+                            return (<div key={elem} className="tag-chip">{getTagName(elem)}</div>)
+                        })
+                    }
+                </div>)}
             </div>
     )
 }
