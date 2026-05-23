@@ -9,7 +9,7 @@ import { useState } from "react"
 
 
 */
-function ToolBar(userRecomendations) {
+function ToolBar(searchBarInput) {
 
     console.log(userRecomendations)
 
@@ -23,7 +23,7 @@ function ToolBar(userRecomendations) {
 
     return (
         <div id="tool-bar-container">
-            
+            <input></input>
         </div>
     )
 }

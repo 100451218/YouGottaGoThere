@@ -1,6 +1,6 @@
 import { useFetch } from "../../hooks/useFetch"
 import { useTags } from "../../hooks/useTags"
-
+import '../../css/RestaurantRecomendation.css'
 
 
 function RestaurantRecomendation({friend_review}) {
@@ -15,8 +15,8 @@ function RestaurantRecomendation({friend_review}) {
     }
 
     return (
-    <div >
-                <strong>{friend_review.restaurant_name}</strong> (Ubicación: {friend_review.locationx}, {friend_review.locationy})
+    <div className="recomendation-container">
+                <h3>{friend_review.restaurant_name}</h3> (Ubicación: {friend_review.locationx}, {friend_review.locationy})
                 <br />
                 Es el top {friend_review.ranking} de tu amigo <strong>{friend_review.username}</strong>
                 <br />
