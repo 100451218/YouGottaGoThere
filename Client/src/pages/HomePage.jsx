@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { useFetch } from '../hooks/useFetch'
+import { useTags } from "../hooks/useTags"
 import RestaurantRecomendation from '../components/Home/RestaurantRecomendation'
 import ToolBar from '../components/Home/ToolBar'
 
@@ -16,11 +17,15 @@ function Home()
     // Estado: Restaurantes recomendados para el usuario
     const [userRecomendations, setUserRecomendations] = useState([])
     
+    const { allTags} = useTags(fetchRequest)
+
     // Estado: Filtros
     const [filters, setFilters] = useState({
         searchQuery: "",
         activeTags: []
     })
+
+    
 
 
     // Cargar las recomendaciones al usuario al montar
@@ -46,30 +51,42 @@ function Home()
     }
 
     const handleSearchChange = (e) => {
-        console.log("Saving searchbarQuery")
-        /*
-        const filtered = userRecomendations && userRecomendations.filter((item) => {
-            // In here, we apply the rules of the filter since we only have the name filter, we only set it based on the name
-            return item.restaurant_name.toLowerCase().includes(e.toLowerCase())
-        })
-        setFilteredRecomendations(filtered)*/
+        // We set filters to a brand new object with all the previous filters with the searchquery modified, to trigger the update of state
         setFilters(prevFilters => ({...prevFilters, searchQuery: e.target.value}))
     }
 
     const toggleTagFilter = (clickedTag) => {
         console.log("tag", clickedTag,"clicked")
+        setFilters(prevFilters => {
+            let newTags = [...prevFilters.activeTags]
+            // if the clicked tag has been unchecked but it is still in the filters, remove it
+            if (!clickedTag.checked && prevFilters.activeTags.includes(clickedTag.id)){
+                console.log("tag was removed from filters")
+                newTags = prevFilters.activeTags.filter(tag => tag !== clickedTag.id)
+            // If the clicked tag has been checked but it is not in the filters, add it
+            } else if (clickedTag.checked && !prevFilters.activeTags.includes(clickedTag.id)){
+                console.log("tag was added to filters")
+                newTags = [...prevFilters.activeTags, clickedTag.id];
+                console.log("in",newTags)
+            } else {
+                console.log("info", clickedTag, prevFilters.activeTags)
+            }
+            console.log("out",newTags)
+            return {...prevFilters, activeTags: newTags}
+        })
+        console.log("filters",filters)
     }
 
 
     const filteredRecomendations = userRecomendations.filter(rec => {
         const matchesSearch = rec.restaurant_name.toLowerCase().includes(filters.searchQuery.toLowerCase());
 
-        const hasTags = filters.activeTags.length === 0 || filters.activeTags.every(tag => rec.tags.includes(tag));
+        const hasTags = filters.activeTags.length === 0 || filters.activeTags.every(tag => rec.tags && rec.tags.includes(tag));
 
         return matchesSearch && hasTags;
     })
 
-    console.log(filteredRecomendations)
+    console.log("filteredRec",filteredRecomendations)
 
     return <div className="home">
 
@@ -84,8 +101,17 @@ function Home()
             handleSearchChange(e)
         }}
     ></input>
+    
+    { allTags && allTags.length>0 ? allTags.map((allTags, index) => {
+        return (<input type='checkbox' key={index} value={allTags.id} onClick={(e) => toggleTagFilter(e.target)}></input>)
+    }) : null}
+    
+
+
+
+
         { filteredRecomendations && filteredRecomendations.length >0 ? filteredRecomendations.map((friend_review, index) => {
-                return (<RestaurantRecomendation key={index} friend_review={friend_review}/>)
+                return (<RestaurantRecomendation key={index} friend_review={friend_review} allTags={allTags}/>)
             }): null}
         
     </div>

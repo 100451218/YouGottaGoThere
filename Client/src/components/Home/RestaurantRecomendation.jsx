@@ -3,12 +3,9 @@ import { useTags } from "../../hooks/useTags"
 import '../../css/RestaurantRecomendation.css'
 
 
-function RestaurantRecomendation({friend_review}) {
+function RestaurantRecomendation({friend_review, allTags}) {
     const { fetchRequest } = useFetch()
-    const { allTags} = useTags(fetchRequest)
     //allTags obtiene a través del hook todas las tags en forma de una lista de {id, name}
-    
-    console.log(allTags)
     const getTagName = (tagId) => {
         const tag = allTags.find(t => t.id === tagId)
         return tag ? tag.name : `Tag ${tagId}`
