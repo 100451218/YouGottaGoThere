@@ -42,7 +42,7 @@ function Home()
         const result = await fetchRequest("/recomendations")
         console.log(result)
         if (result.success) {
-            if (result.data==="Friends have no review in top 5"){
+            if (result.data==="Friends have no review in top 5" || !Array.isArray(result.data)){
                 setUserRecomendations([])
             } else {
                 setUserRecomendations(result.data)
@@ -82,7 +82,7 @@ function Home()
         const matchesSearch = rec.restaurant_name.toLowerCase().includes(filters.searchQuery.toLowerCase());
 
         const hasTags = filters.activeTags.length === 0 || filters.activeTags.every(tag => rec.tags && rec.tags.includes(tag));
-
+        
         return matchesSearch && hasTags;
     })
 
@@ -105,14 +105,16 @@ function Home()
     { allTags && allTags.length>0 ? allTags.map((allTags, index) => {
         return (<input type='checkbox' key={index} value={allTags.id} onClick={(e) => toggleTagFilter(e.target)}></input>)
     }) : null}
-    
 
-
-
-
-        { filteredRecomendations && filteredRecomendations.length >0 ? filteredRecomendations.map((friend_review, index) => {
-                return (<RestaurantRecomendation key={index} friend_review={friend_review} allTags={allTags}/>)
-            }): null}
+        { filteredRecomendations && filteredRecomendations.length > 0 ? (
+            filteredRecomendations.map((friend_review, index) => (
+                <RestaurantRecomendation key={index} friend_review={friend_review} allTags={allTags} />
+            ))
+        ) : userRecomendations.length === 0 ? (
+            <h2>Parece ser que no hay recomendaciones, agrega más amigos y diles que hagan reviews</h2>
+        ) : (
+            <h2>No hay recomendaciones que encajen con tus filtros</h2>
+        )}
         
     </div>
 }
