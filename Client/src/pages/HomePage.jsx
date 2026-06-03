@@ -60,13 +60,13 @@ function Home()
         setFilters(prevFilters => {
             let newTags = [...prevFilters.activeTags]
             // if the clicked tag has been unchecked but it is still in the filters, remove it
-            if (!clickedTag.checked && prevFilters.activeTags.includes(clickedTag.id)){
+            if (!clickedTag.checked && prevFilters.activeTags.includes(clickedTag.value)){
                 console.log("tag was removed from filters")
-                newTags = prevFilters.activeTags.filter(tag => tag !== clickedTag.id)
+                newTags = prevFilters.activeTags.filter(tag => tag !== clickedTag.value)
             // If the clicked tag has been checked but it is not in the filters, add it
-            } else if (clickedTag.checked && !prevFilters.activeTags.includes(clickedTag.id)){
-                console.log("tag was added to filters")
-                newTags = [...prevFilters.activeTags, clickedTag.id];
+            } else if (clickedTag.checked && !prevFilters.activeTags.includes(clickedTag.value)){
+                console.log("tag was added to filters", clickedTag.value)
+                newTags = [...prevFilters.activeTags, clickedTag.value];
                 console.log("in",newTags)
             } else {
                 console.log("info", clickedTag, prevFilters.activeTags)
