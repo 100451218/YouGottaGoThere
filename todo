@@ -2,7 +2,9 @@ Te has quedado haciendo los usuarios:
 Done in last sesion:
 
 ToDo in next session:
-    - Poder filtrar por tags
+    - Poder filtrar por tags (https://stackoverflow.com/questions/76539845/how-to-use-multiple-filters-on-an-array-in-javascript
+    https://www.youtube.com/watch?v=vuMZ1S7K_2I
+    https://www.geeksforgeeks.org/javascript/how-to-filter-an-array-of-objects-based-on-multiple-properties-in-javascript/)
 ToDo in future:
     - Explorar para meter apis de google maps
     - Contemplar como funciona cuando se tienen dos reviews del mismo restaurante de distintos amigos

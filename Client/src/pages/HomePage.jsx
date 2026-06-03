@@ -15,8 +15,13 @@ function Home()
     
     // Estado: Restaurantes recomendados para el usuario
     const [userRecomendations, setUserRecomendations] = useState([])
-    const [filteredRecomendations, setFilteredRecomendations] = useState([])
-    const [searchBarInput, setSearchBarInput] = useState("")
+    
+    // Estado: Filtros
+    const [filters, setFilters] = useState({
+        searchQuery: "",
+        activeTags: []
+    })
+
 
     // Cargar las recomendaciones al usuario al montar
     useEffect(() => {
@@ -34,22 +39,37 @@ function Home()
         if (result.success) {
             if (result.data==="Friends have no review in top 5"){
                 setUserRecomendations([])
-                setFilteredRecomendations([])
             } else {
                 setUserRecomendations(result.data)
-                setFilteredRecomendations(result.data)
             }   
         }
     }
 
-    const filterRecomendations = (e) => {
-        console.log("Filtering recomendations")
+    const handleSearchChange = (e) => {
+        console.log("Saving searchbarQuery")
+        /*
         const filtered = userRecomendations && userRecomendations.filter((item) => {
             // In here, we apply the rules of the filter since we only have the name filter, we only set it based on the name
             return item.restaurant_name.toLowerCase().includes(e.toLowerCase())
         })
-        setFilteredRecomendations(filtered)
+        setFilteredRecomendations(filtered)*/
+        setFilters(prevFilters => ({...prevFilters, searchQuery: e.target.value}))
     }
+
+    const toggleTagFilter = (clickedTag) => {
+        console.log("tag", clickedTag,"clicked")
+    }
+
+
+    const filteredRecomendations = userRecomendations.filter(rec => {
+        const matchesSearch = rec.restaurant_name.toLowerCase().includes(filters.searchQuery.toLowerCase());
+
+        const hasTags = filters.activeTags.length === 0 || filters.activeTags.every(tag => rec.tags.includes(tag));
+
+        return matchesSearch && hasTags;
+    })
+
+    console.log(filteredRecomendations)
 
     return <div className="home">
 
@@ -59,10 +79,9 @@ function Home()
         type='search'
         className='searchbar'
         placeholder='Search'
-        value={searchBarInput}
+        value={filters.searchQuery}
         onChange={(e) => {
-            setSearchBarInput(e.target.value)
-            filterRecomendations(e.target.value)
+            handleSearchChange(e)
         }}
     ></input>
         { filteredRecomendations && filteredRecomendations.length >0 ? filteredRecomendations.map((friend_review, index) => {
