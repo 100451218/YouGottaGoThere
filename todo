@@ -1,9 +1,7 @@
 Te has quedado haciendo los usuarios:
 Done in last sesion:
-    - Sistema de filtrado escalado
-    - Poder filtrar por tags 
-ToDo in next session:
     - Bug cuando se filtra por una tag que no hay en ningún sitio
+ToDo in next session:
     - Formatear las tags
 ToDo in future:
     - Explorar para meter apis de google maps

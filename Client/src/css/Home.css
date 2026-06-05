@@ -1,0 +1,94 @@
+.TagFilters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  padding-top: 1%;
+}
+
+.tagFilter-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: linear-gradient(306deg, #e3e1b9 0%, #cfb6e9 100%);
+  opacity: 0.7;
+}
+
+.tagFilter-container h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: white;
+}
+
+.tagFilter-container:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ⭐ CUANDO LA CHECKBOX ESTÁ CHECKED */
+.tagFilter-container:has(.tagFilter:checked) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5), inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+.tagFilter {
+  display: none; /* La checkbox permanece oculta */
+}
+
+/* Botón para expandir/contraer filtros */
+.filters-toggle-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.filters-toggle-btn:hover {
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Contenedor con los filtros */
+.filters-wrapper {
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+/* Cuando está colapsado */
+.filters-wrapper.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Icono de flecha con rotación */
+.toggle-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.filters-wrapper.collapsed ~ .filters-toggle-btn .toggle-arrow {
+  transform: rotate(-90deg);
+}

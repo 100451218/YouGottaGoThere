@@ -5,6 +5,8 @@ import { useFetch } from '../hooks/useFetch'
 import { useTags } from "../hooks/useTags"
 import RestaurantRecomendation from '../components/Home/RestaurantRecomendation'
 import ToolBar from '../components/Home/ToolBar'
+import TagFilter from '../components/Home/TagFilter'
+import "../css/Home.css"
 
 function Home() 
 {
@@ -24,6 +26,8 @@ function Home()
         searchQuery: "",
         activeTags: []
     })
+
+    const [filtersExpanded, setFiltersExpanded] = useState(true)
 
     
 
@@ -92,29 +96,48 @@ function Home()
 
         {/*<ToolBar 
             searchBarInput={searchBarInput}></ToolBar>*/}
-    <input  
+    <button 
+        className="filters-toggle-btn"
+        onClick={() => setFiltersExpanded(!filtersExpanded)}
+        >
+        <span className="toggle-arrow">▼</span>
+        {filtersExpanded ? "Ocultar Filtros" : "Mostrar Filtros"}
+        </button>
+
+        <div className={`filters-wrapper ${!filtersExpanded ? 'collapsed' : ''}`}>
+        <div className='TagFilters-container'>
+            {allTags && allTags.length > 0 
+            ? allTags.map((allTags, index) => (
+                <TagFilter 
+                    key={index} 
+                    value={allTags.id} 
+                    tag={allTags} 
+                    onClick={(e) => toggleTagFilter(e.target)}
+                />
+                ))
+            : null
+            }
+        </div>
+        </div>
+
+        <input  
         type='search'
         className='searchbar'
         placeholder='Search'
         value={filters.searchQuery}
-        onChange={(e) => {
-            handleSearchChange(e)
-        }}
-    ></input>
+        onChange={(e) => handleSearchChange(e)}
+        />
     
-    { allTags && allTags.length>0 ? allTags.map((allTags, index) => {
-        return (<input type='checkbox' key={index} value={allTags.id} onClick={(e) => toggleTagFilter(e.target)}></input>)
-    }) : null}
 
-        { filteredRecomendations && filteredRecomendations.length > 0 ? (
-            filteredRecomendations.map((friend_review, index) => (
-                <RestaurantRecomendation key={index} friend_review={friend_review} allTags={allTags} />
-            ))
-        ) : userRecomendations.length === 0 ? (
-            <h2>Parece ser que no hay recomendaciones, agrega más amigos y diles que hagan reviews</h2>
-        ) : (
-            <h2>No hay recomendaciones que encajen con tus filtros</h2>
-        )}
+    { filteredRecomendations && filteredRecomendations.length > 0 ? (
+        filteredRecomendations.map((friend_review, index) => (
+            <RestaurantRecomendation key={index} friend_review={friend_review} allTags={allTags} />
+        ))
+    ) : userRecomendations.length === 0 ? (
+        <h2>Parece ser que no hay recomendaciones, agrega más amigos y diles que hagan reviews</h2>
+    ) : (
+        <h2>No hay recomendaciones que encajen con tus filtros</h2>
+    )}
         
     </div>
 }
